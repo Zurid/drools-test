@@ -1,0 +1,22 @@
+package com.sample
+ 
+import com.sample.model.Account
+import com.sample.model.Transaction
+
+rule "accountBalanceAtLeast"
+    when
+        $a : Account( $b: balance < 100, $actId: id )
+        accumulate(Transaction($amt: amount, accountId == $actId);
+            $s: sum($amt)
+        )
+    then
+        System.out.println("----------- balance - " + $a.getBalance() + " --- "+ $b + " actid-" + $actId);
+        System.out.println("-------------- transaction sum - " + $s);
+end
+
+rule "alwaysTrue"
+    when
+        eval(true)
+    then
+        System.out.println("last rule executed");
+end
